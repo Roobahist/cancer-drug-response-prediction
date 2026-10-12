@@ -35,6 +35,8 @@ jobs:
           drug-response plot-reported
           test -s reports/figures/reported_comparison.png
           test -s reports/figures/reported_comparison.svg
+      - name: Record resolved package versions
+        run: python -m pip freeze > runs/demo/resolved-environment.txt
       - name: Upload reproducibility outputs
         uses: actions/upload-artifact@v4
         with:

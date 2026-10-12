@@ -31,6 +31,25 @@ Evaluation splits and sample identifiers have not been recovered.*
 
 ![Historical reported MSE and R², not independently reproduced](reports/figures/reported_comparison.png)
 
+## Original study figure archive
+
+The original team also published PCA/clustering, training-history,
+feature-importance and SHAP illustrations. They are archived unchanged and
+are **not independently regenerated from the missing original data**.
+
+<details>
+<summary>View four historical figures (original group, unverified)</summary>
+
+| Gene-expression exploration | Training-history illustration |
+|:---:|:---:|
+| ![Original PCA figure](legacy/images/dl_img_7.png) | ![Original training loss](legacy/images/dl_img_53.png) |
+
+| Original feature importance | Original SHAP summary |
+|:---:|:---:|
+| ![Original feature importance](legacy/images/dl_img_6.png) | ![Original SHAP summary](legacy/images/dl_img_16.png) |
+
+</details>
+
 ## What is reproducible today
 
 The modernization replaces fixed Colab/Kaggle paths and notebook globals with

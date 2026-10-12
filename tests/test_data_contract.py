@@ -69,3 +69,22 @@ def test_duplicate_gene_keys_fail_fast(tmp_path):
     with pytest.raises(ValueError, match="duplicate model"):
         merge_feature_tables(tmp_path / "response.csv", tmp_path / "gene.csv",
                              tmp_path / "drug.csv")
+
+
+@pytest.mark.parametrize("missing_modality", ["gene", "fingerprint"])
+def test_unmatched_modalities_fail_instead_of_being_imputed(tmp_path, missing_modality):
+    responses = pd.DataFrame({
+        "model_id": ["A", "B"], "drug_id": ["D", "E"], "LN_IC50": [0.9, 1.5],
+    })
+    genes = pd.DataFrame({"model_id": ["A", "B"], "EXPR": [2.0, 3.0]})
+    drugs = pd.DataFrame({"drug_id": ["D", "E"], "bit_0": [1, 0]})
+    if missing_modality == "gene":
+        genes = genes[genes["model_id"] != "B"]
+    else:
+        drugs = drugs[drugs["drug_id"] != "E"]
+    for name, frame in [("response", responses), ("gene", genes), ("drug", drugs)]:
+        frame.to_csv(tmp_path / f"{name}.csv", index=False)
+    with pytest.raises(ValueError, match="lacks a matching"):
+        merge_feature_tables(
+            tmp_path / "response.csv", tmp_path / "gene.csv", tmp_path / "drug.csv"
+        )

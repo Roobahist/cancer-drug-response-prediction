@@ -1,0 +1,32 @@
+{
+  "source": "https://github.com/davidenoma/DL_cancer_drug_response/blob/main/README.md",
+  "status": "reported_not_reproduced",
+  "target": "LN_IC50",
+  "note": "Values transcribed from the original collaborative README. Original datasets, exact training splits, and fitted artifacts were not available to independently reproduce them.",
+  "models": [
+    {
+      "model": "Optimized CNN",
+      "mse": 1.16,
+      "r2": 0.832,
+      "mae": 0.81
+    },
+    {
+      "model": "Random forest",
+      "mse": 1.284,
+      "r2": 0.814,
+      "mae": null
+    },
+    {
+      "model": "Optimized MLP",
+      "mse": 1.334,
+      "r2": 0.806,
+      "mae": null
+    },
+    {
+      "model": "Linear regression",
+      "mse": 1.356,
+      "r2": 0.803,
+      "mae": null
+    }
+  ]
+}

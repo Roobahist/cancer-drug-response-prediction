@@ -1,0 +1,54 @@
+name: Research reproducibility checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  test-and-visualize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install editable project
+        run: python -m pip install -e ".[dev]"
+      - name: Lint
+        run: ruff check src tests
+      - name: Contract and synthetic evaluation tests
+        run: pytest
+      - name: Run explicitly synthetic demonstration
+        run: drug-response demo --output runs/demo
+      - name: Render historical score chart from attributed JSON
+        run: |
+          drug-response plot-reported
+          test -s reports/figures/reported_comparison.png
+          test -s reports/figures/reported_comparison.svg
+      - name: Upload reproducibility outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-evaluation-and-reported-figures
+          path: |
+            runs/demo/
+            reports/figures/
+      - name: Commit only source-attributed reference chart
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/figures/reported_comparison.png reports/figures/reported_comparison.svg
+          if ! git diff --cached --quiet; then
+            git commit -m "figures: publish attributed historical score comparison"
+            git push
+          fi

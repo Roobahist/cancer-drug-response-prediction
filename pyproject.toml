@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cancer-drug-response-prediction"
+version = "0.1.0"
+description = "Reproducible, leakage-aware drug response regression from expression and molecular features"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+dependencies = [
+  "numpy>=1.26,<3",
+  "pandas>=2.1,<3",
+  "scikit-learn>=1.4,<2",
+  "matplotlib>=3.8,<4",
+]
+
+[project.optional-dependencies]
+chemistry = ["rdkit>=2024.3"]
+dev = ["pytest>=8,<10", "ruff>=0.6,<1"]
+
+[project.scripts]
+drug-response = "drug_response.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["drug_response*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100

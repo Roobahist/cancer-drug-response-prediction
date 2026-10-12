@@ -103,8 +103,8 @@ def benchmark(
             "test_mse": float(mean_squared_error(y_test, predicted)),
             "test_mae": float(mean_absolute_error(y_test, predicted)),
             "test_r2": float(r2_score(y_test, predicted)),
-            "train_rows": int(len(train_idx)),
-            "test_rows": int(len(test_idx)),
+            "train_rows": len(train_idx),
+            "test_rows": len(test_idx),
             "hyperparameters": json.dumps(search.best_params_, sort_keys=True),
         })
         for pos, prediction in zip(test_idx, predicted, strict=True):
@@ -127,7 +127,7 @@ def benchmark(
         "feature_count": len(columns),
         "gene_feature_count": sum(c.startswith("gene_") for c in columns),
         "drug_feature_count": sum(c.startswith("fp_") for c in columns),
-        "rows": int(len(data)),
+        "rows": len(data),
         "train_rows": len(train_idx),
         "test_rows": len(test_idx),
         "train_groups": int(groups_train.nunique()),

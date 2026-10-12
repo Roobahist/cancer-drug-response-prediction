@@ -61,8 +61,10 @@ def merge_feature_tables(
     merged = response.merge(genes, how="left", on=model_col, validate="many_to_one")
     merged = merged.merge(drugs, how="left", on=drug_col, validate="many_to_one")
     new_cols = [c for c in merged.columns if c.startswith(("gene_", "fp_"))]
-    if merged[new_cols].isna().all(axis=1).any():
-        raise ValueError("A response has no matching gene or molecular information")
+    gene_cols = [c for c in new_cols if c.startswith("gene_")]
+    drug_cols = [c for c in new_cols if c.startswith("fp_")]
+    if merged[gene_cols].isna().all(axis=1).any() or merged[drug_cols].isna().all(axis=1).any():
+        raise ValueError("A response lacks a matching gene or molecular feature record")
     return merged
 
 
